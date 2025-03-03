@@ -1,1 +1,641 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Περιγραφικό Δοκίμιο: Τόποι & Εσωτερικοί Χώροι</title>
+  <!-- Import Comfortaa font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comfortaa', Arial, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    .creator-info {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: gold;
+      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7);
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #111111;
+      border-radius: 10px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.7);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .accordion {
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      transition: all 0.3s ease-in-out;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    .accordion:hover {
+      background-color: #666;
+    }
+    .panel {
+      display: none;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+      margin-top: 5px;
+      background-color: #222;
+    }
+    .panel p, .panel ul {
+      margin: 0;
+      padding: 0;
+    }
+    .intro { background-color: #B30000; }
+    .appearance { background-color: #B36B00; }
+    .atmosphere { background-color: #8C00B3; }
+    .conclusion { background-color: #006BB3; }
+
+    .button {
+      display: inline-block;
+      padding: 12px;
+      margin: 5px 0;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    /* Popup styling for Language Help */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      background: #ffffff;
+      padding: 20px;
+      box-shadow: 0 8px 12px rgba(0,0,0,0.4);
+      border-radius: 10px;
+      z-index: 1000;
+      overflow-y: auto;
+      max-height: 80vh;
+      color: #000000;
+    }
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      margin-top: -10px;
+    }
+    .popup h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    /* Topic container styling */
+    .topic-container {
+      margin-top: 20px;
+      background-color: #B30000;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 8px 15px rgba(0,0,0,0.7);
+      text-align: center;
+    }
+    #randomTopic {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      min-height: 50px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      margin-bottom: 10px;
+    }
+    #appearancePoints, #atmospherePoints {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      min-height: 50px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      margin-top: 10px;
+    }
+    .essay-section {
+      margin-top: 20px;
+      background-color: #006BB3;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 8px 15px rgba(0,0,0,0.7);
+    }
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      color: #000;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<div class="creator-info">Δημιουργία: Παναγιώτης Δόμβρος 2025 (CC BY-NC)</div>
+
+<h1>📖 Περιγραφικό Δοκίμιο: Τόποι & Εσωτερικοί Χώροι</h1>
+
+<!-- Expandable Sections (Intro, Appearance, Atmosphere, Conclusion) -->
+<div class="container">
+    <button class="accordion intro">1️⃣ Εισαγωγή</button>
+    <div class="panel">
+        <p>🔹 Παρουσιάστε τον τόπο/χώρο:</p>
+        <ul>
+            <li>Ποιο μέρος/χώρο περιγράφετε; 🏠🖼️</li>
+            <li>Γιατί είναι σημαντικό ή ενδιαφέρον; 🤔</li>
+            <li>Μια πρόταση που προετοιμάζει τον αναγνώστη.</li>
+        </ul>
+        <p><em>"Ένα από τα πιο αγαπημένα μου μέρη είναι το οικογενειακό μας σαλόνι, όπου περνάμε αξέχαστες στιγμές."</em></p>
+    </div>
+
+    <button class="accordion appearance">2️⃣ Φυσική Περιγραφή</button>
+    <div class="panel">
+        <p>🔹 Εξωτερικά ή εσωτερικά χαρακτηριστικά:</p>
+        <ul>
+            <li>Διαστάσεις, χρώματα, διακόσμηση</li>
+            <li>Έπιπλα ή κτίρια, φυσικά στοιχεία</li>
+            <li>Καιρικές συνθήκες/φωτισμός (αν ισχύει)</li>
+        </ul>
+        <p><em>"Τα ζεστά χρώματα στους τοίχους, ο μεγάλος καναπές και τα ξύλινα ράφια με βιβλία δημιουργούν μια φιλική ατμόσφαιρα."</em></p>
+    </div>
+
+    <button class="accordion atmosphere">3️⃣ Ατμόσφαιρα & Χαρακτήρας</button>
+    <div class="panel">
+        <p>🔹 Πώς νιώθετε όταν βρίσκεστε εκεί:</p>
+        <ul>
+            <li>Αίσθηση που εκπέμπει (ήρεμη, ζωντανή, θορυβώδης) 😌</li>
+            <li>Δραστηριότητες που λαμβάνουν χώρα (π.χ. συναντήσεις, παιχνίδια, διάβασμα)</li>
+            <li>Κουλτούρα/συνήθειες των ανθρώπων (αν πρόκειται για δημόσιο χώρο)</li>
+        </ul>
+        <p><em>"Στο σαλόνι μας επικρατεί πάντα ζεστασιά. Συχνά μαζευόμαστε γύρω από το τζάκι, συζητάμε και μοιραζόμαστε ιστορίες."</em></p>
+    </div>
+
+    <button class="accordion conclusion">4️⃣ Συμπέρασμα</button>
+    <div class="panel">
+        <p>🔹 Ανακεφαλαιώστε τη σημασία του χώρου:</p>
+        <ul>
+            <li>Τι τον κάνει αξέχαστο/ξεχωριστό; 🌟</li>
+            <li>Πώς σας έχει επηρεάσει; 💡</li>
+        </ul>
+        <p><em>"Αυτό το δωμάτιο είναι η καρδιά του σπιτιού μας. Γεμίζει τη ζωή μου με όμορφες αναμνήσεις και συναισθήματα."</em></p>
+    </div>
+</div>
+
+<!-- Popup Button + Language Help BEFORE the writing section -->
+<div class="container" style="margin-top: 20px;">
+    <button class="button" onclick="openPopup()">📚 Γλωσσική Βοήθεια</button>
+</div>
+
+<!-- Popup for Extended Language Help -->
+<div id="overlay" class="overlay" onclick="closePopup()"></div>
+<div id="popup" class="popup">
+    <span class="close" onclick="closePopup()">&times;</span>
+    <h2>📖 Γλωσσική Βοήθεια</h2>
+    <p><strong>Χρήσιμες Φράσεις &amp; Επίθετα</strong></p>
+
+    <div style="margin-bottom: 15px;">
+        <h3>Εισαγωγή</h3>
+        <ul>
+            <li>Το μέρος/ο χώρος που περιγράφω είναι...</li>
+            <li>Αποφάσισα να μιλήσω για αυτό γιατί...</li>
+            <li>Το συγκεκριμένο σημείο έχει ιδιαίτερη σημασία για μένα...</li>
+        </ul>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <h3>Φυσική Περιγραφή</h3>
+        <ul>
+            <li>Είναι/Βρίσκεται σε... (κεντρικό σημείο, βουνό, κλειστό χώρο, κλπ.)</li>
+            <li>Τα χρώματα του χώρου είναι...</li>
+            <li>Υπάρχουν έπιπλα όπως... (καναπές, τραπέζι, ράφια)</li>
+            <li>Ο φωτισμός είναι... (έντονος, χαμηλός, φυσικός κλπ.)</li>
+            <li>Επίθετα για εμφάνιση: φωτεινός, σκοτεινός, ευρύχωρος, στενός, αρχοντικός, παραδοσιακός, μοντέρνος, εντυπωσιακός</li>
+        </ul>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <h3>Ατμόσφαιρα & Χαρακτήρας</h3>
+        <ul>
+            <li>Η ατμόσφαιρα είναι... (ήρεμη, ζωντανή, χαλαρωτική, μυστήρια, οικογενειακή)</li>
+            <li>Συναισθήματα: νιώθω ασφάλεια, νοσταλγία, χαρά, θαλπωρή</li>
+            <li>Δραστηριότητες: συζητήσεις, μελέτη, δημιουργία, ξεκούραση</li>
+            <li>Επίθετα για ατμόσφαιρα: φιλόξενος, γαλήνιος, μελαγχολικός, θορυβώδης, γεμάτος ενέργεια</li>
+        </ul>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <h3>Συμπέρασμα</h3>
+        <ul>
+            <li>Συνοψίζοντας, αυτός ο χώρος... (με εμπνέει, μου δίνει κουράγιο, μου θυμίζει όμορφες στιγμές)</li>
+            <li>Εύχομαι όλοι να μπορούσαν να... (τον επισκεφτούν, τον βιώσουν, τον απολαύσουν)</li>
+            <li>Αποτελεί για μένα... (πηγή έμπνευσης, ηρεμίας, δημιουργικότητας)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Second Container: 20+ random topics for describing places (including interior spaces) -->
+<div class="container" style="margin-top: 20px;">
+    <h2 style="text-align: center;">🎲 Τυχαίο Θέμα για Περιγραφή Τόπου/Χώρου</h2>
+    <div style="text-align: center;">
+        <button class="button" onclick="generateRandomPlace()">Δημιουργία Τυχαίου Θέματος</button>
+    </div>
+
+    <div class="topic-container">
+        <h3>🌍 Τόπος ή Χώρος προς Περιγραφή</h3>
+        <div id="randomTopic">Πατήστε το κουμπί για να λάβετε ένα τυχαίο θέμα.</div>
+
+        <h4>🔸 Πιθανά Στοιχεία Εμφάνισης</h4>
+        <div id="appearancePoints">Θα εμφανιστούν μετά την επιλογή θέματος</div>
+
+        <h4>🔹 Πιθανά Στοιχεία Ατμόσφαιρας</h4>
+        <div id="atmospherePoints">Θα εμφανιστούν μετά την επιλογή θέματος</div>
+    </div>
+
+    <!-- Χώρος συγγραφής περιγραφικού δοκιμίου -->
+    <div class="essay-section">
+        <h3>📝 Συγγραφή Δοκιμίου</h3>
+        <textarea id="essayText" placeholder="Γράψτε εδώ το περιγραφικό δοκίμιό σας..."></textarea>
+        <button class="button" onclick="copyAndSubmit()">📋 Αντιγραφή & Υποβολή</button>
+    </div>
+</div>
+
+<script>
+  // Expandable sections for the 4 main parts
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      let panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+
+  // Extended language help popup
+  function openPopup() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popup").style.display = "block";
+  }
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popup").style.display = "none";
+  }
+
+  // 20+ random topics for describing external or internal places
+  const descriptivePlaces = [
+    {
+      title: "Περιγράψτε το σαλόνι του σπιτιού σας",
+      appearance: [
+        "Ευρύχωρο με μεγάλα παράθυρα",
+        "Έπιπλα όπως καναπές, πολυθρόνες, τραπεζάκι",
+        "Ζεστά χρώματα στους τοίχους και πίνακες"
+      ],
+      atmosphere: [
+        "Οικογενειακή και άνετη διάθεση",
+        "Συχνά μαζεύεται όλη η οικογένεια",
+        "Ιδανικό μέρος για ξεκούραση και κουβέντα"
+      ]
+    },
+    {
+      title: "Περιγράψτε το δωμάτιό σας",
+      appearance: [
+        "Μικρό ή μεγάλο με γραφείο και κρεβάτι",
+        "Αφίσες ή προσωπικά αντικείμενα στους τοίχους",
+        "Διακοσμητικά και χρώματα που σας αρέσουν"
+      ],
+      atmosphere: [
+        "Ιδιωτικότητα και αίσθηση χαλάρωσης",
+        "Χώρος δημιουργίας ή μελέτης",
+        "Αντικατοπτρίζει την προσωπικότητά σας"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα μουσείο που επισκεφθήκατε",
+      appearance: [
+        "Μεγάλοι χώροι με εκθέματα και βιτρίνες",
+        "Αίθουσες αφιερωμένες σε διαφορετικές περιόδους",
+        "Φωτισμός με προβολείς στα αντικείμενα"
+      ],
+      atmosphere: [
+        "Ήσυχη, σοβαρή και γεμάτη σεβασμό",
+        "Πληροφοριακές πινακίδες και οδηγοί",
+        "Ενθουσιασμός για την ιστορία/τέχνη"
+      ]
+    },
+    {
+      title: "Περιγράψτε τη βιβλιοθήκη του σχολείου σας",
+      appearance: [
+        "Ράφια γεμάτα βιβλία, περιοδικά και εγκυκλοπαίδειες",
+        "Τραπέζια και καρέκλες για μελέτη",
+        "Ήσυχο περιβάλλον, συνήθως κλειστός χώρος"
+      ],
+      atmosphere: [
+        "Συγκεντρωμένη και μελετηρή ατμόσφαιρα",
+        "Λειτουργεί ως καταφύγιο για διάβασμα",
+        "Μερικές φορές ακούγονται ψίθυροι μαθητών"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα εργοστάσιο ή βιοτεχνία που έχετε δει",
+      appearance: [
+        "Μεγάλοι χώροι, μηχανήματα και γραμμές παραγωγής",
+        "Συχνά μεταλλικές επιφάνειες και σωλήνες",
+        "Διάδρομοι και πινακίδες ασφάλειας"
+      ],
+      atmosphere: [
+        "Θορυβώδης και γεμάτη κίνηση",
+        "Ομαδική δουλειά για την παραγωγή προϊόντων",
+        "Μυρωδιές από υλικά ή πρώτες ύλες"
+      ]
+    },
+    {
+      title: "Περιγράψτε το δωμάτιο όπου μελετάτε",
+      appearance: [
+        "Γραφείο με βιβλία και τετράδια",
+        "Λάμπα γραφείου και ράφια",
+        "Χρώματα που βοηθούν στη συγκέντρωση"
+      ],
+      atmosphere: [
+        "Ήσυχη και οργανωμένη",
+        "Ένας προσωπικός χώρος για σκέψη",
+        "Σε γεμίζει με αίσθημα παραγωγικότητας"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα μικρό καφέ στο κέντρο της πόλης",
+      appearance: [
+        "Λίγα τραπεζάκια και καρέκλες κοντά στη βιτρίνα",
+        "Διακόσμηση με κάδρα ή φυτά",
+        "Μια μικρή μπάρα παρασκευής καφέ"
+      ],
+      atmosphere: [
+        "Ζεστή και φιλική προς τον πελάτη",
+        "Μυρωδιά φρεσκοκομμένου καφέ",
+        "Συχνές συζητήσεις και χαλαρή μουσική"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα αμφιθέατρο ή αίθουσα εκδηλώσεων",
+      appearance: [
+        "Πολλές σειρές καθισμάτων, σκηνή ή βάθρο",
+        "Μεγάλα ηχεία και φώτα προβολής",
+        "Τυχόν διακοσμητικά πανό ή αφίσες"
+      ],
+      atmosphere: [
+        "Ενθουσιασμός όταν ξεκινά μια εκδήλωση",
+        "Συγκέντρωση πολλών ατόμων για μια ομιλία ή παράσταση",
+        "Αίσθηση προσμονής και ζωντάνιας"
+      ]
+    },
+    {
+      title: "Περιγράψτε την κουζίνα του σπιτιού σας",
+      appearance: [
+        "Ντουλάπια, ψυγείο, φούρνος και πάγκος",
+        "Κεραμικά πλακάκια ή ξύλινο πάτωμα",
+        "Σκεύη, κατσαρόλες και βαζάκια μπαχαρικών"
+      ],
+      atmosphere: [
+        "Μυρωδιές φαγητού και λιχουδιών",
+        "Κεντρικό σημείο συγκέντρωσης για την οικογένεια",
+        "Θορυβώδες αν όλοι μαγειρεύουν μαζί"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα φουαγιέ θεάτρου",
+      appearance: [
+        "Συχνά μεγάλοι πολυέλαιοι ή εντυπωσιακός φωτισμός",
+        "Κόκκινα χαλιά ή κομψό δάπεδο",
+        "Αφίσες παραστάσεων και ταμείο με εισιτήρια"
+      ],
+      atmosphere: [
+        "Πολυτελής και κομψή",
+        "Ήχος από συζητήσεις θεατών",
+        "Προσμονή για την παράσταση που θα ακολουθήσει"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα γυμναστήριο",
+      appearance: [
+        "Μηχανήματα, βαράκια και καθρέφτες",
+        "Χώροι για γιόγκα ή αερόβιες ασκήσεις",
+        "Αποδυτήρια και ντουλάπια ασφαλείας"
+      ],
+      atmosphere: [
+        "Ενέργεια και δυνατή μουσική",
+        "Άνθρωποι που αθλούνται με στόχους",
+        "Αίσθηση υγιεινού τρόπου ζωής"
+      ]
+    },
+    {
+      title: "Περιγράψτε μια ιδιωτική βιβλιοθήκη/γραφείο ενός σπιτιού",
+      appearance: [
+        "Μεγάλα ράφια γεμάτα βιβλία",
+        "Γραφείο με λάμπα και σημειωματάριο",
+        "Καρέκλα ή πολυθρόνα ανάγνωσης"
+      ],
+      atmosphere: [
+        "Ήσυχη και συγκεντρωμένη",
+        "Ιδανική για διάβασμα ή δημιουργική εργασία",
+        "Προσωπικό στυλ διακόσμησης"
+      ]
+    },
+    {
+      title: "Περιγράψτε το υπνοδωμάτιο ενός φιλικού προσώπου",
+      appearance: [
+        "Κρεβάτι, κομοδίνα, ντουλάπα",
+        "Χρώματα στους τοίχους, ίσως αφίσες ή φωτογραφίες",
+        "Είδη προσωπικής διακόσμησης"
+      ],
+      atmosphere: [
+        "Αίσθηση ηρεμίας και ιδιωτικότητας",
+        "Αντανακλά τα χόμπι και την προσωπικότητά του/της",
+        "Φιλόξενο και ζεστό για έναν επισκέπτη"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα εργαστήριο τέχνης ή χειροτεχνίας",
+      appearance: [
+        "Πάγκοι εργασίας γεμάτοι υλικά και εργαλεία",
+        "Χρώματα, πινέλα, καμβάδες",
+        "Ίσως κουτιά με πηλό ή υφάσματα"
+      ],
+      atmosphere: [
+        "Δημιουργική και γεμάτη φαντασία",
+        "Παρέχει ελευθερία έκφρασης",
+        "Περιοχή που ενθαρρύνει την καινοτομία"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα μικρό τοπικό παντοπωλείο",
+      appearance: [
+        "Ράφια με προϊόντα, φρούτα και λαχανικά σε πάγκους",
+        "Μικρός χώρος, παραδοσιακή ταμειακή μηχανή",
+        "Χειρόγραφες πινακίδες τιμών"
+      ],
+      atmosphere: [
+        "Οικείος χαρακτήρας, με σταθερούς πελάτες",
+        "Φιλικές συζητήσεις με τον καταστηματάρχη",
+        "Αίσθηση χωριού μέσα σε μια σύγχρονη πόλη"
+      ]
+    },
+    {
+      title: "Περιγράψτε μια τάξη στο σχολείο σας (εσωτερικός χώρος)",
+      appearance: [
+        "Θρανία, πίνακας και καρέκλες μαθητών",
+        "Αφίσες ή χάρτες στους τοίχους",
+        "Φωτισμός από παράθυρα ή λαμπτήρες"
+      ],
+      atmosphere: [
+        "Μερικές φορές ήσυχη, άλλες φορές θορυβώδης",
+        "Ζωντανές συζητήσεις ή διαγωνίσματα",
+        "Δυνατό αίσθημα ομαδικότητας μεταξύ των μαθητών"
+      ]
+    },
+    {
+      title: "Περιγράψτε το γραφείο του διευθυντή/διευθύντριας του σχολείου",
+      appearance: [
+        "Μεγάλο γραφείο, βιβλιοθήκες με φακέλους",
+        "Διακοσμητικά ή διπλώματα στους τοίχους",
+        "Καρέκλα/πολυθρόνα και ίσως χώρος για συναντήσεις"
+      ],
+      atmosphere: [
+        "Επίσημη και οργανωμένη",
+        "Συχνά γεμάτη έγγραφα και προγράμματα",
+        "Υποδεικνύει ευθύνη και διοικητική εργασία"
+      ]
+    },
+    {
+      title: "Περιγράψτε έναν εκθεσιακό χώρο σε εμπορικό κέντρο",
+      appearance: [
+        "Πάγκοι προβολής προϊόντων ή έργων",
+        "Φώτα LED και διαφημιστικά banners",
+        "Κομψή διακόσμηση για να τραβήξει την προσοχή"
+      ],
+      atmosphere: [
+        "Περισσότερο εμπορική από πολιτιστική",
+        "Περαστικοί που κοντοστέκονται να δουν τις προσφορές",
+        "Ήπια μουσική στο background"
+      ]
+    },
+    {
+      title: "Περιγράψτε ένα μικρό ιδιωτικό μουσικό στούντιο",
+      appearance: [
+        "Ηχομονωμένα τοιχώματα, κονσόλα ήχου",
+        "Μικρόφωνο, ηχεία και όργανα",
+        "Καρέκλες ή καναπές για τους μουσικούς"
+      ],
+      atmosphere: [
+        "Δημιουργική και γεμάτη έμπνευση",
+        "Μερικές φορές έντονη εργασία με ηχογραφήσεις",
+        "Πειραματισμός με ήχους και ρυθμούς"
+      ]
+    }
+  ];
+
+  function generateRandomPlace() {
+    const randomIndex = Math.floor(Math.random() * descriptivePlaces.length);
+    const chosen = descriptivePlaces[randomIndex];
+
+    document.getElementById('randomTopic').textContent = chosen.title;
+    document.getElementById('appearancePoints').innerHTML =
+      "<ul><li>" + chosen.appearance.join("</li><li>") + "</li></ul>";
+    document.getElementById('atmospherePoints').innerHTML =
+      "<ul><li>" + chosen.atmosphere.join("</li><li>") + "</li></ul>";
+  }
+
+  // Logic for copy & submit
+  function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert('Το κείμενό σας αντιγράφηκε (fallback)!');
+    } catch (err) {
+      alert('Αποτυχία αντιγραφής ακόμη και με fallback.');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function copyAndSubmit() {
+    const essayText = document.getElementById('essayText').value;
+    if (!essayText) {
+      // If no text, just open Tally
+      window.open('https://tally.so/r/meY48e', '_blank');
+      return;
+    }
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(essayText)
+        .then(() => {
+          alert('Το κείμενό σας αντιγράφηκε στο πρόχειρο!');
+          window.open('https://tally.so/r/meY48e', '_blank');
+        })
+        .catch(err => {
+          console.error('Σφάλμα αντιγραφής:', err);
+          fallbackCopyTextToClipboard(essayText);
+          window.open('https://tally.so/r/meY48e', '_blank');
+        });
+    } else {
+      fallbackCopyTextToClipboard(essayText);
+      window.open('https://tally.so/r/meY48e', '_blank');
+    }
+  }
+</script>
+</body>
+</html>
 
